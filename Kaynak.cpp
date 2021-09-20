@@ -626,47 +626,47 @@ inline void NameScore()
 {
     string kelime;
 
-    ifstream dosya("C:\\Users\\mert_\\Desktop\\p022_names.txt");
+ifstream dosya("C:\\Users\\mert_\\Desktop\\p022_names.txt");
 
-    while (getline(dosya, kelime, ','))
+while (getline(dosya, kelime, ','))
+{
+    Name.push_back(kelime);
+    //cout << kelime << " ";
+}
+dosya.close();
+
+for (unsigned int i = 0; i < Name.size() - 1; i++)
+{
+    for (unsigned int j = 0; j < Name.size() - 1; j++)
     {
-        Name.push_back(kelime);
-        //cout << kelime << " ";
-    }
-    dosya.close();
-    
-    for (unsigned int i = 0; i < Name.size() - 1; i++)
-    {
-        for (unsigned int j = 0; j < Name.size() - 1; j++)
+        if (Name[j] > Name[j + 1])
         {
-            if (Name[j] > Name[j + 1])
-            {
-                string temp = Name[j + 1];
-                Name[j + 1] = Name[j];
-                Name[j] = temp;
-            }
+            string temp = Name[j + 1];
+            Name[j + 1] = Name[j];
+            Name[j] = temp;
         }
     }
-    /*for (string m : Name)
-    {
-        cout << m << " ";   // sýralanmýs hali
-    }*/
-    //cout << Name.size();
+}
+/*for (string m : Name)
+{
+    cout << m << " ";   // sýralanmýs hali
+}*/
+//cout << Name.size();
 }
 
 inline void NameScore_2()
 {
     static unsigned long long int sum = 0, T = 0;
     string x;
-    
+
     for (unsigned int i = 0; i < Name.size(); i++)
     {
         x = Name[i];
         sum = 0;
-        
+
         unsigned int k = 1;
-        
-        for (; k < x.length()-1; k++)
+
+        for (; k < x.length() - 1; k++)
         {
             sum += (int)x[k] - 64;
         }
@@ -676,24 +676,62 @@ inline void NameScore_2()
     cout << "Name Score:" << T << endl;
 }
 
-inline int ResidualNumber()
+vector <unsigned int> RDN;
+unsigned int RDN2[28123] = { 0 };
+
+const unsigned int Limit = 28123;
+
+inline void ResidualNumberDividing()
 {
-    vector <unsigned int> v1;
-    unsigned int T;
-    
-    for (unsigned int n = 1; true; n++)
+    unsigned int Toplam;
+
+    for (unsigned int i = 1; i < Limit; i++)
     {
-        T = 0;
-        for (unsigned int i = 1; i < n; i++)
+        Toplam = 1;
+        for (unsigned int j = 2; j < ceil(sqrt(i)); )
         {
-            if (n % i == 0) { T += i; }
+            if (i % j == 0)
+            {
+                Toplam += j;
+                Toplam += i / j;
+            }
+            j++; 
+            if (j*j == i) { Toplam += j; }
         }
-        if (n < T) { v1.push_back(n*2); }
+        
+        if (i < Toplam) { RDN.push_back(i); } // artýk
+        //else if (i >= Toplam) { RDN2.push_back(i); }
     }
 
+}
 
+inline void ResiDualNumberEnd()
+{
+   
+    for (unsigned int i = 0; i < RDN.size(); i++)
+    {
+        for (unsigned int m = i; m < RDN.size(); m++)
+        {
+            if (RDN[i] + RDN[m] < 28123)
+            {
 
+                RDN2[(RDN[i] + RDN[m])] = (RDN[i] + RDN[m]);
 
+            }
+        }
+    }
+    cout << RDN.size() << endl;
+}
+inline unsigned int ResiDualNumberEndTotal()
+{
+    unsigned int TOPLAM = 0, SÝZE = sizeof(RDN2) / sizeof(*RDN2);
+    
+    for (unsigned int i = 0; i < SÝZE; i++)
+    {
+        //cout << RDN2[i] << " ";
+        if (RDN2[i] == 0) { TOPLAM += i; }
+    }
+    return TOPLAM;
 }
 
 int main()
@@ -1164,16 +1202,16 @@ int main()
     // soru 22 
     
    /* NameScore();
-    NameScore_2();*/
+   NameScore_2();*/
 
     //----------------------------------------------------------------
 
     // soru 23
+    
+ResidualNumberDividing();
+ResiDualNumberEnd();
+cout << "\n" << ResiDualNumberEndTotal() << endl;
 
-    
-    
-    
-    
 
 
 
